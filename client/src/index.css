@@ -4,12 +4,11 @@ body {
   font-family: sans-serif;
   background-color: #f2f2f2;
 }
+
 .update{
   text-align:center;
 }
-.form{
-  border: 1px solid black;
-}
+
 .movie-card {
   background-color: #fff;
   border: 0;

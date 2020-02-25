@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {Button} from 'reactstrap';
 
 const UpdateMovie = props => {
   const [movie, setMovie] = useState({ id: props.match.params.id });
@@ -65,7 +66,7 @@ const UpdateMovie = props => {
           placeholder="Stars"
         /></div>
         <br/>
-        <button type="submit">Update Movie</button>
+        <Button type="submit">Update Movie</Button>
       </form>
     </div>
   );
