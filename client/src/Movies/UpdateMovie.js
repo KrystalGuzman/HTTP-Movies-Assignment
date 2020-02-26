@@ -1,75 +1,87 @@
-import React, { useState } from "react";
-import axios from "axios";
-import {Button} from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import {Button} from 'reactstrap'
+
+
 
 const UpdateMovie = props => {
-  const [movie, setMovie] = useState({ id: props.match.params.id });
-  // console.log(props.match.param.id)
+  const [ movie, setMovie ] = useState({ id: props.match.params.id })
+
+  const { handleSubmit, register, errors } = useForm({});
+
+  useEffect(() => {
+  })
+
+  const onSubmit = e => {
+    const movieUpdate = {
+      ...movie,
+      stars: movie.stars.split(', '),
+    };
+
+    axios
+      .put(`http://localhost:5000/api/movies/${props.match.params.id}`, movieUpdate)
+      .then(res => {
+        props.history.push('/')
+      })
+  }
 
   const handleChange = e => {
     setMovie({
       ...movie,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    const movieFormat = {
-      ...movie,
-      stars: movie.stars.split(", ")
-    };
-
-    axios
-    
-      .put(
-        `http://localhost:5000/api/movies/${props.match.params.id}`,
-        movieFormat
-      )
-      .then(res => {
-        document.querySelector("form").reset();
-        props.history.push("/");
-      })
-      .catch();
-  };
   return (
-    <div className='update'>
-      <h1>Update Movie</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <div className='form'>
-            <input
-          type="text"
-          name="title"
-          onChange={handleChange}
-          placeholder="Title"
-        />
-        <br />
+    <div className='form'>Form
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
-          type="text"
-          name="director"
+          name='title'
+          placeholder='Title'
           onChange={handleChange}
-          placeholder="Director"
+          ref={register({
+            required: 'Title required.'
+          })}
         />
-        <br />
+        {errors.title && errors.title.message}
+<br/>
         <input
-          type="text"
-          name="metascore"
+          name='director'
+          placeholder='Director'
           onChange={handleChange}
-          placeholder="Score"
+          ref={register({
+            required: 'Director required.'
+          })}
         />
-        <br />
-        <input
-          type="text"
-          name="stars"
-          onChange={handleChange}
-          placeholder="Stars"
-        /></div>
+        {errors.director && errors.director.message}
         <br/>
-        <Button type="submit">Update Movie</Button>
+        <input
+          name='metascore'
+          placeholder='Metascore'
+          onChange={handleChange}
+          ref={register({
+            required: 'Metascore required.'
+          })}
+        />
+        {errors.metascore && errors.metascore.message}
+        <br/>
+        <input
+          name='stars'
+          placeholder='Stars'
+          onChange={handleChange}
+          ref={register({
+            required: 'Stars required.'
+          })}
+        />
+        {errors.stars && errors.stars.message}
+        <br/>
+        <Button type='submit'>
+          Edit Movie
+        </Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
 export default UpdateMovie;
